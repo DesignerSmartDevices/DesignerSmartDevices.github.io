@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Портфолио — Имя Фамилия</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #e8e8e8;
+    --muted: #888;
+    --accent: #c8f542;
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(15,15,15,0.9);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 6rem 2rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #0f0f0f;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    border: none;
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: #0f0f0f; }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--muted); }
+
+  /* ── STATS ── */
+  .stats {
+    display: flex; gap: 3rem;
+    padding: 3rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    border-top: 1px solid var(--border);
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    color: var(--accent);
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); }
+
+  /* ── SECTION TITLE ── */
+  .section { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+  .section-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+  .section-title { font-family: var(--font-display); font-size: 1.8rem; }
+  .section-link { color: var(--muted); font-size: 0.85rem; text-decoration: none; }
+  .section-link:hover { color: var(--accent); }
+
+  /* ── PROJECTS GRID ── */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .project-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+  .project-thumb {
+    width: 100%; aspect-ratio: 16/9;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    position: relative; overflow: hidden;
+  }
+  /* Placeholder gradient per category */
+  .project-thumb[data-color="green"]  { background: linear-gradient(135deg,#1a2a0a,#2d4a10); }
+  .project-thumb[data-color="blue"]   { background: linear-gradient(135deg,#0a1a2a,#103048); }
+  .project-thumb[data-color="purple"] { background: linear-gradient(135deg,#1a0a2a,#300a48); }
+  .project-thumb[data-color="orange"] { background: linear-gradient(135deg,#2a1a0a,#483010); }
+
+  .project-body { padding: 1.25rem; }
+  .project-tag {
+    font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  .project-title { font-weight: 600; margin-bottom: 0.5rem; }
+  .project-desc { font-size: 0.85rem; color: var(--muted); }
+
+  /* ── SERVICES ── */
+  .services-list { display: grid; gap: 1px; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .service-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 1.5rem;
+    background: var(--surface);
+    transition: background 0.15s;
+  }
+  .service-item:hover { background: #222; }
+  .service-name { font-weight: 500; }
+  .service-price { color: var(--accent); font-size: 0.9rem; font-weight: 500; }
+
+  /* ── ABOUT ── */
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .about-text p { color: var(--muted); margin-bottom: 1rem; }
+  .skills-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .skill-tag {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .skill-tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ── CONTACT ── */
+  .contact-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3rem;
+    text-align: center;
+  }
+  .contact-box h2 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.75rem; }
+  .contact-box p { color: var(--muted); margin-bottom: 2rem; }
+  .contact-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .contact-link {
+    display: flex; align-items: center; gap: 0.5rem;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+    align-items: center; justify-content: center; padding: 2rem;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 560px; width: 100%;
+    padding: 2.5rem;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 1rem; right: 1rem;
+    background: none; border: none; color: var(--muted);
+    font-size: 1.5rem; cursor: pointer;
+    transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .modal .tag { font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .modal p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+  .modal-meta { display: flex; gap: 2rem; margin-bottom: 1.5rem; }
+  .modal-meta-item label { display: block; font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+  .modal-meta-item span { font-size: 0.9rem; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .stats { gap: 1.5rem; flex-wrap: wrap; }
+    nav { padding: 1rem; }
+    .nav-links { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">ИФ</a><!-- замените на свои инициалы -->
+  <div class="nav-links">
+    <a href="#projects">Работы</a>
+    <a href="#services">Услуги</a>
+    <a href="#about">Обо мне</a>
+    <a href="#contact">Контакт</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-tag">Репетитор · Разработчик</span>
+  <h1>Превращаю идеи<br>в <em>работающий</em> продукт</h1>
+  <p>Помогаю освоить программирование и разрабатываю сайты и веб-приложения под ключ. Результат — не просто код, а бизнес-инструмент.</p>
+  <div class="hero-actions">
+    <a href="#projects" class="btn btn-primary">Посмотреть работы</a>
+    <a href="#contact" class="btn btn-outline">Написать мне</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats" style="max-width:900px;margin:0 auto;">
+  <div>
+    <div class="stat-num">50+</div>
+    <div class="stat-label">студентов</div>
+  </div>
+  <div>
+    <div class="stat-num">30+</div>
+    <div class="stat-label">проектов</div>
+  </div>
+  <div>
+    <div class="stat-num">5 лет</div>
+    <div class="stat-label">опыта</div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section class="section" id="projects">
+  <div class="section-header">
+    <h2 class="section-title">Работы</h2>
+    <!-- ссылка на все проекты, если нужно -->
+  </div>
+  <div class="projects-grid" id="projectsGrid">
+    <!-- Карточки генерируются через JS — просто редактируйте массив projects ниже -->
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-header">
+    <h2 class="section-title">Услуги и цены</h2>
+  </div>
+  <div class="services-list" id="servicesList">
+    <!-- Генерируется через JS -->
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-header">
+    <h2 class="section-title">Обо мне</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Занимаюсь веб-разработкой и репетиторством. Помогаю людям освоить программирование с нуля или прокачать существующие навыки.</p>
+      <p>Работаю с компаниями, которым нужен собственный цифровой продукт — от лендинга до полноценного веб-приложения.</p>
+      <p>Верю, что хороший продукт должен решать реальные задачи бизнеса, а не просто красиво выглядеть.</p>
+    </div>
+    <div>
+      <p style="font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:1rem;">Технологии</p>
+      <div class="skills-cloud" id="skillsCloud">
+        <!-- Генерируется через JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="contact-box">
+    <h2>Давайте работать вместе</h2>
+    <p>Есть проект или хотите начать обучение? Напишите — отвечу в течение суток.</p>
+    <div class="contact-links">
+      <a href="mailto:your@email.com" class="contact-link">✉ your@email.com</a>
+      <a href="https://t.me/yourusername" class="contact-link">✈ Telegram</a>
+      <a href="https://tilda.cc/yourusername" class="contact-link">🌐 Tilda</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 Имя Фамилия · Сделано без шаблонов</p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <div class="modal-tag" id="modalTag"></div>
+    <h3 id="modalTitle"></h3>
+    <div class="modal-meta" id="modalMeta"></div>
+    <p id="modalDesc"></p>
+    <a id="modalLink" href="#" class="btn btn-primary" target="_blank" style="display:none">Открыть проект</a>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+//  РЕДАКТИРУЙТЕ ТОЛЬКО ЭТОТ РАЗДЕЛ
+// ════════════════════════════════════════════════
+
+const ME = {
+  initials: "ИФ",        // замените
+  name:     "Имя Фамилия",
+  tagline:  "Репетитор · Разработчик",
+  email:    "your@email.com",
+  telegram: "yourusername",
+  tilda:    "yourusername",
+  stats: [
+    { num: "50+",   label: "студентов" },
+    { num: "30+",   label: "проектов"  },
+    { num: "5 лет", label: "опыта"     },
+  ],
+};
+
+// Добавляйте свои проекты сюда 👇
+const PROJECTS = [
+  {
+    title:  "Интернет-магазин цветов",
+    tag:    "Веб-разработка",
+    desc:   "Лендинг + каталог + корзина. Увеличил конверсию клиента на 40%.",
+    color:  "green",
+    emoji:  "🌸",
+    period: "Март 2025",
+    duration: "3 недели",
+    link:   "",  // оставьте пустым, если нет ссылки
+  },
+  {
+    title:  "Сайт для онлайн-школы",
+    tag:    "Fullstack",
+    desc:   "Личный кабинет, расписание, оплата. Уже 200+ учеников.",
+    color:  "blue",
+    emoji:  "📚",
+    period: "Янв 2025",
+    duration: "6 недель",
+    link:   "",
+  },
+  {
+    title:  "CRM для сервиса авто",
+    tag:    "Веб-приложение",
+    desc:   "Учёт заявок, клиентов и финансов в одном месте.",
+    color:  "purple",
+    emoji:  "🔧",
+    period: "Ноя 2024",
+    duration: "2 месяца",
+    link:   "",
+  },
+  {
+    title:  "Курс Python с нуля",
+    tag:    "Репетиторство",
+    desc:   "Студент освоил Python за 3 месяца и устроился на работу.",
+    color:  "orange",
+    emoji:  "🐍",
+    period: "2024",
+    duration: "3 месяца",
+    link:   "",
+  },
+];
+
+// Добавляйте/меняйте услуги и цены сюда 👇
+const SERVICES = [
+  { name: "Разработка лендинга",          price: "от 30 000 ₽" },
+  { name: "Веб-приложение под ключ",      price: "от 100 000 ₽" },
+  { name: "Репетиторство (1 занятие)",    price: "от 2 500 ₽" },
+  { name: "Пакет 10 занятий",             price: "от 20 000 ₽" },
+  { name: "Консультация по продукту",     price: "5 000 ₽ / час" },
+];
+
+// Технологии/навыки 👇
+const SKILLS = [
+  "HTML", "CSS", "JavaScript", "React",
+  "Python", "Node.js", "PostgreSQL",
+  "Tilda", "Git", "Figma",
+];
+
+// ════════════════════════════════════════════════
+//  ЛОГИКА (не нужно редактировать)
+// ════════════════════════════════════════════════
+
+// Render projects
+const grid = document.getElementById("projectsGrid");
+PROJECTS.forEach((p, i) => {
+  const card = document.createElement("div");
+  card.className = "project-card";
+  card.innerHTML = `
+    <div class="project-thumb" data-color="${p.color}">${p.emoji}</div>
+    <div class="project-body">
+      <div class="project-tag">${p.tag}</div>
+      <div class="project-title">${p.title}</div>
+      <div class="project-desc">${p.desc}</div>
+    </div>`;
+  card.addEventListener("click", () => openModal(i));
+  grid.appendChild(card);
+});
+
+// Render services
+const svcList = document.getElementById("servicesList");
+SERVICES.forEach(s => {
+  const item = document.createElement("div");
+  item.className = "service-item";
+  item.innerHTML = `<span class="service-name">${s.name}</span><span class="service-price">${s.price}</span>`;
+  svcList.appendChild(item);
+});
+
+// Render skills
+const cloud = document.getElementById("skillsCloud");
+SKILLS.forEach(sk => {
+  const tag = document.createElement("span");
+  tag.className = "skill-tag";
+  tag.textContent = sk;
+  cloud.appendChild(tag);
+});
+
+// Modal
+function openModal(i) {
+  const p = PROJECTS[i];
+  document.getElementById("modalTag").textContent   = p.tag;
+  document.getElementById("modalTitle").textContent = p.title;
+  document.getElementById("modalDesc").textContent  = p.desc;
+  const meta = document.getElementById("modalMeta");
+  meta.innerHTML = `
+    <div class="modal-meta-item"><label>Период</label><span>${p.period}</span></div>
+    <div class="modal-meta-item"><label>Срок</label><span>${p.duration}</span></div>`;
+  const link = document.getElementById("modalLink");
+  link.style.display = p.link ? "inline-block" : "none";
+  if (p.link) link.href = p.link;
+  document.getElementById("modalOverlay").classList.add("open");
+}
+
+document.getElementById("modalClose").addEventListener("click", () =>
+  document.getElementById("modalOverlay").classList.remove("open"));
+document.getElementById("modalOverlay").addEventListener("click", e => {
+  if (e.target === e.currentTarget)
+    document.getElementById("modalOverlay").classList.remove("open");
+});
+</script>
+</body>
+</html>
